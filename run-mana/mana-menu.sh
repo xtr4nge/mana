@@ -1,4 +1,5 @@
 #!/bin/bash
+#This is a work in progress and not complete, don't use it
 
 upstream=eth0
 phy=wlan0
@@ -37,7 +38,7 @@ function crackapd() {
 
 function start_hostapd() {
 	hostapd=$lib/hostapd
-	conf=$etc/hostapd-karma.conf
+	conf=$etc/hostapd-mana.conf
 	sed -i "s/^interface=.*$/interface=$phy/" $conf
 	$hostapd $conf&
 	sleep 5
@@ -47,7 +48,7 @@ function start_hostapd() {
 
 function start_hostapd_eap() {
 	hostapd=$lib/hostapd
-	conf=$etc/hostapd-karma-eap.conf
+	conf=$etc/hostapd-mana-eap.conf
 	sed -i "s/^interface=.*$/interface=$phy/" $conf
 	sed -i "s/^bss=.*$/bss=$phy0/" $conf
 	$hostapd $conf&
@@ -82,7 +83,7 @@ function tinyproxy() {
 }
 
 function stunnel() {
-service stunnel4 start
+	stunnel4 /etc/mana-toolkit/stunnel.conf
 }
 
 function dhcpd() {
@@ -193,7 +194,7 @@ function killem() {
 	pkill python
 	pkill ruby
 	service apache2 stop
-	service stunnel4 stop
+	pkill stunnel4
 	iptables --policy INPUT ACCEPT
 	iptables --policy FORWARD ACCEPT
 	iptables --policy OUTPUT ACCEPT

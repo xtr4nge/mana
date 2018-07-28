@@ -8,7 +8,7 @@ A toolkit for rogue access point (evilAP) attacks first presented at Defcon 22.
 
 More specifically, it contains the improvements to KARMA attacks we implemented into hostapd, as well as some useful configs for conducting MitM once you've managed to get a victim to connect.
 
-You can read more on our blog at http://www.sensepost.com/blog/11823.html, or watch the talk at https://youtu.be/i2-jReLBSVk or see the text heavy slide version at http://www.slideshare.net/sensepost/improvement-in-rogue-access-points-sensepost-defcon-22
+You can read more on our blog at https://sensepost.com/blog/2015/improvements-in-rogue-ap-attacks-mana-1%2F2/, or watch the talk at https://youtu.be/i2-jReLBSVk or see the text heavy slide version at http://www.slideshare.net/sensepost/improvement-in-rogue-access-points-sensepost-defcon-22
 
 Contents
 --------
@@ -17,7 +17,7 @@ It contains:
 * kali/ubuntu-install.sh - simple installers for Kali 1.0.9 and Ubuntu 14.04 (trusty)
 * slides - an explanation of what we're doing here
 * run-mana - the controller scripts
-* hostapd-manna - modified hostapd that implements our new karma attacks
+* hostapd-mana - modified hostapd that implements our new mana attacks
 * crackapd - a tool for offloading the cracking of EAP creds to an external tool and re-adding them to the hostapd EAP config (auto crack 'n add)
 * sslstrip-hsts - our modifications to LeonardoNVE's & moxie's cool tools
 * apache - the apache vhosts for the noupstream hacks; deploy to /etc/apache2/ and /var/www/ respectivley

